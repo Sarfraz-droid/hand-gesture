@@ -16,7 +16,7 @@ FRAME_WINDOW = st.image([])
 #     return model
 
 # model = createModal()
-camera = cv2.VideoCapture(0)
+camera = cv2.VideoCapture(cv2.CAP_V4L2)
 
 while run:
     _, opencv_image = camera.read()
