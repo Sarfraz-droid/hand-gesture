@@ -1,6 +1,5 @@
 import streamlit as st
 import cv2
-import keras
 import numpy as np
 import classifier
 
