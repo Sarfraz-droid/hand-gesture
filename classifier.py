@@ -1,7 +1,6 @@
 import mediapipe as mp
 from mediapipe.tasks import python
 from mediapipe.tasks.python import vision
-import math
 from mediapipe.framework.formats import landmark_pb2
 
 
@@ -20,8 +19,9 @@ class GestureDetection:
 
     
     def createImage(self, image):
+        print(image.shape)
         image = mp.Image(
-            image_format=mp.ImageFormat.SBGRA,
+            image_format=mp.ImageFormat.SRGB,
             data= image
         )
         

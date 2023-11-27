@@ -2,31 +2,28 @@ import streamlit as st
 import cv2
 import numpy as np
 import classifier
+from streamlit_webrtc import webrtc_streamer
+import av
 
 st.title('Sign Recognition')
 
 # picture = st.camera_input("Take a picture")
 
 model = classifier.GestureDetection()
-run = st.checkbox('Run')
-FRAME_WINDOW = st.image([])
 
-# def createModal():
-#     model = keras.models.load_model('./model.h5')
-#     return model
-
-# model = createModal()
-camera = cv2.VideoCapture(cv2.CAP_V4L2)
-
-while run:
-    _, opencv_image = camera.read()
+def video_frame_callback(frame):
+    
+    opencv_image = frame.to_ndarray(format="bgr24")
+    
+    
+    if(opencv_image is None):
+        return av.VideoFrame.from_ndarray(opencv_image, format="bgr24")
+    
+    opencv_image = cv2.flip(opencv_image, 1)
     
     opencv_image = cv2.cvtColor(opencv_image, cv2.COLOR_BGR2RGB)
-    
-    
-    arr = np.asarray(opencv_image)
-    
-    img = model.createImage(arr)
+
+    img = model.createImage(opencv_image)
     
     try:
     
@@ -34,9 +31,8 @@ while run:
         landmarks = model.get_landmarks(results)        
         annotated_image = model.annotate(opencv_image, landmarks)    
         cv2.putText(annotated_image, landmarks[0].category_name, (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2, cv2.LINE_AA)
-        FRAME_WINDOW.image(annotated_image, channels="RGB")
+        return av.VideoFrame.from_ndarray(annotated_image, format="rgb24")
     except:
-        FRAME_WINDOW.image(opencv_image, channels="RGB")
-
-    
-    
+        return av.VideoFrame.from_ndarray(opencv_image, format="rgb24")
+        
+webrtc_streamer(key="sign_detection", video_frame_callback=video_frame_callback)
