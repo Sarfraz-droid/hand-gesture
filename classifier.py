@@ -15,11 +15,11 @@ class GestureDetection:
         base_options = python.BaseOptions(model_asset_path='./gesture_recognizer_2.task')
         options = vision.GestureRecognizerOptions(base_options=base_options)
         self.recognizer = vision.GestureRecognizer.create_from_options(options)
-        print(self.recognizer)
+        # print(self.recognizer)
 
     
     def createImage(self, image):
-        print(image.shape)
+        # print(image.shape)
         image = mp.Image(
             image_format=mp.ImageFormat.SRGB,
             data= image

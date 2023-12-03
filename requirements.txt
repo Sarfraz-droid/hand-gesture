@@ -4,3 +4,4 @@ numpy
 mediapipe
 opencv-python
 streamlit_webrtc
+dotenv
